@@ -4,8 +4,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 
 import com.codepath.apps.restclienttemplate.models.Tweet;
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
@@ -64,5 +66,19 @@ public class TimeLineActivity extends AppCompatActivity {
                 Log.i(TAG, "failure fetching timeline", throwable);
             }
         });
+    }
+
+    public void onLogOut(View view) {
+        System.out.println("here");
+        //forget user who logged in
+        TwitterApp.getRestClient(this).clearAccessToken();
+
+        //navigate to loginActivity
+        Intent intent = new Intent(this, LoginActivity.class);
+        //ensure back button is disabled
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        System.out.println("here");
+        startActivity(intent);
     }
 }
