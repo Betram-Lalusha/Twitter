@@ -13,4 +13,12 @@
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
     </style>
 
+    <style name="counterText">green
+        <item name="android:textColor">#2bb3ba</item>
+    </style>
+
+    <style name="counterOverride">red
+        <item name="android:textColor">#c92a4a</item>
+    </style>
+
 </resources>
