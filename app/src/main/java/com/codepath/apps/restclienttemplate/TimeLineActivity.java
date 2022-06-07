@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -31,12 +32,26 @@ public class TimeLineActivity extends AppCompatActivity {
     TwitterClient twitterClient;
     TweetsAdapter tweetsAdapter;
     RecyclerView tweetsRecyclerView;
+
     private final int REQUEST_CODE = 20;
+    private SwipeRefreshLayout swipeRefreshLayout;
     private final String TAG ="TimelineActivity";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_time_line);
+
+        //find swipe container view
+        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeContainer);
+        //listener for swipe refresh
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                Toast.makeText(TimeLineActivity.this, "refreshing", Toast.LENGTH_SHORT).show();
+                //code executed during refresh
+                fetchTimelineAsync(0);
+            }
+        });
 
         twitterClient = TwitterApp.getRestClient(this);
         //find recycler view
@@ -50,6 +65,33 @@ public class TimeLineActivity extends AppCompatActivity {
         //set adapter
         tweetsRecyclerView.setAdapter(tweetsAdapter);
         populateHomeTimeLine();
+    }
+
+    //get new data
+    private void fetchTimelineAsync(int page) {
+        twitterClient.getHomeTimeline(new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Headers headers, JSON json) {
+                //remove old data
+                tweetsAdapter.clear();
+
+                //add new data
+                try {
+                    tweetsAdapter.addAll(Tweet.getAllTweets(json.jsonArray));
+                } catch (JSONException e) {
+                    Log.d(TAG, "failed to get all tweets " + e.toString());
+                    e.printStackTrace();
+                }
+
+                //end refreshing
+                swipeRefreshLayout.setRefreshing(false);
+            }
+
+            @Override
+            public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
+                Log.d(TAG, "Fetching failed on refresh " + response);
+            }
+        });
     }
 
     @Override
@@ -101,7 +143,7 @@ public class TimeLineActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
-                Log.i(TAG, "failure fetching timeline", throwable);
+                Log.i(TAG, "failure fetching timeline " + response, throwable);
             }
         });
     }

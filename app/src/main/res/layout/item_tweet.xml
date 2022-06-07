@@ -34,4 +34,14 @@
         android:layout_toEndOf="@+id/userProfilePicture"
         android:text="All drake has is hits man" />
 
+    <ImageView
+        android:id="@+id/tweetImage"
+        android:layout_width="265dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tweetBody"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="7dp"
+        android:layout_marginEnd="62dp"
+        tools:srcCompat="@tools:sample/avatars" />
+
 </RelativeLayout>
