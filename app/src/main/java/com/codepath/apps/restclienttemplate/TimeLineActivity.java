@@ -1,5 +1,6 @@
 package com.codepath.apps.restclienttemplate;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -17,6 +18,7 @@ import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.parceler.Parcels;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -29,6 +31,7 @@ public class TimeLineActivity extends AppCompatActivity {
     TwitterClient twitterClient;
     TweetsAdapter tweetsAdapter;
     RecyclerView tweetsRecyclerView;
+    private final int REQUEST_CODE = 20;
     private final String TAG ="TimelineActivity";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,11 +65,25 @@ public class TimeLineActivity extends AppCompatActivity {
         if(menuItem.getItemId() == R.id.compose) {
             Toast.makeText(this, "compose!",Toast.LENGTH_SHORT ).show();
             Intent intent = new Intent(this, ComposeActivity.class);
-            startActivity(intent);
+            startActivityForResult(intent, REQUEST_CODE);
+            return true;
         }
-
-        return true;
+        return super.onOptionsItemSelected(menuItem);
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @NonNull Intent data) {
+        if(requestCode == REQUEST_CODE && resultCode == RESULT_OK) {
+            //GET DATA FROM INTENT
+            Tweet tweet = Parcels.unwrap(data.getParcelableExtra("tweet"));
+            //UPDATE RV WITH TWEEK
+            tweets.add(0, tweet);
+            tweetsAdapter.notifyItemChanged(0);
+            tweetsRecyclerView.smoothScrollToPosition(0);
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
     private void populateHomeTimeLine() {
         twitterClient.getHomeTimeline(new JsonHttpResponseHandler() {
             @Override

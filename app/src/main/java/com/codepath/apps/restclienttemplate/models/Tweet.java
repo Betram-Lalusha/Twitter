@@ -3,15 +3,19 @@ package com.codepath.apps.restclienttemplate.models;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.parceler.Parcel;
 
 import java.util.LinkedList;
 import java.util.List;
 
+@Parcel
 public class Tweet {
 
     public User user;
     public String tweetBody;
     public String createdAt;
+
+    public Tweet() {}
 
     public static Tweet fromJson(JSONObject jsonObject) {
         Tweet tweet = new Tweet();
