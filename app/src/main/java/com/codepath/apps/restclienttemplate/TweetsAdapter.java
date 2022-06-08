@@ -1,6 +1,7 @@
 package com.codepath.apps.restclienttemplate;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,8 @@ import com.bumptech.glide.load.resource.bitmap.GranularRoundedCorners;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 import com.codepath.apps.restclienttemplate.models.Tweet;
+
+import org.parceler.Parcels;
 
 import java.util.List;
 
@@ -69,7 +72,7 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
     //bind views based on position of element
 
     //define a viewholder
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         public TextView userName;
         public CardView cardView;
@@ -85,6 +88,9 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
             tweetBody = viewItem.findViewById(R.id.tweetBody);
             tweetImage = viewItem.findViewById(R.id.tweetImage);
             userProfilePicture = viewItem.findViewById(R.id.userProfilePicture);
+
+            //listen to click events
+            viewItem.setOnClickListener(this);
         }
 
         //insert data into tweet row
@@ -101,6 +107,20 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
                 cardView.setVisibility(View.GONE);
             }
             Glide.with(context).load(tweet.user.userImageUrl).into(userProfilePicture);
+        }
+
+        //when user clicks a movie, take user to movie details
+        @Override
+        public void onClick(View v) {
+            System.out.println("clicked!!!");
+            int position = getAdapterPosition();
+            if(position != RecyclerView.NO_POSITION) {
+                Tweet tweet = tweets.get(position);
+                Intent intent = new Intent(context, TweetDetailActivity.class);
+                intent.putExtra(Tweet.class.getSimpleName(), Parcels.wrap(tweet));
+                //show tweet details
+                context.startActivity(intent);
+            }
         }
     }
 }

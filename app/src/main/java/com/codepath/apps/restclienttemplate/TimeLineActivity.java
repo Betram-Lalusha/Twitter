@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.codepath.apps.restclienttemplate.models.Tweet;
@@ -31,6 +32,8 @@ public class TimeLineActivity extends AppCompatActivity {
     List<Tweet> tweets;
     TwitterClient twitterClient;
     TweetsAdapter tweetsAdapter;
+    // Instance of the progress action-view
+    MenuItem miActionProgressItem;
     RecyclerView tweetsRecyclerView;
 
     private final int REQUEST_CODE = 20;
@@ -48,8 +51,14 @@ public class TimeLineActivity extends AppCompatActivity {
             @Override
             public void onRefresh() {
                 Toast.makeText(TimeLineActivity.this, "refreshing", Toast.LENGTH_SHORT).show();
+
                 //code executed during refresh
+                //1. Show Progress within ActionBar
+                showProgressBar();
+                //2. fetch new data
                 fetchTimelineAsync(0);
+                //remove progress bar
+                hideProgressBar();
             }
         });
 
@@ -65,10 +74,22 @@ public class TimeLineActivity extends AppCompatActivity {
         //set adapter
         tweetsRecyclerView.setAdapter(tweetsAdapter);
         populateHomeTimeLine();
+
+    }
+
+    //controls the action in progress display
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        // Store instance of the menu item containing progress
+        miActionProgressItem = menu.findItem(R.id.miActionProgress);
+
+        // Return to finish
+        return super.onPrepareOptionsMenu(menu);
     }
 
     //get new data
     private void fetchTimelineAsync(int page) {
+        showProgressBar();
         twitterClient.getHomeTimeline(new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Headers headers, JSON json) {
@@ -85,11 +106,13 @@ public class TimeLineActivity extends AppCompatActivity {
 
                 //end refreshing
                 swipeRefreshLayout.setRefreshing(false);
+                hideProgressBar();
             }
 
             @Override
             public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
                 Log.d(TAG, "Fetching failed on refresh " + response);
+                hideProgressBar();
             }
         });
     }
@@ -161,4 +184,16 @@ public class TimeLineActivity extends AppCompatActivity {
         System.out.println("here");
         startActivity(intent);
     }
+
+
+    public void showProgressBar() {
+        // Show progress item
+        miActionProgressItem.setVisible(true);
+    }
+
+    public void hideProgressBar() {
+        // Hide progress item
+        miActionProgressItem.setVisible(false);
+    }
+
 }
