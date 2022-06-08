@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.compose.ui.geometry.RoundRect;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -71,6 +72,7 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         public TextView userName;
+        public CardView cardView;
         public TextView  tweetBody;
         public ImageView tweetImage;
         public ImageView userProfilePicture;
@@ -79,6 +81,7 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
             super(viewItem);
 
             userName = viewItem.findViewById(R.id.userName);
+            cardView = viewItem.findViewById(R.id.cardView);
             tweetBody = viewItem.findViewById(R.id.tweetBody);
             tweetImage = viewItem.findViewById(R.id.tweetImage);
             userProfilePicture = viewItem.findViewById(R.id.userProfilePicture);
@@ -87,12 +90,15 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
         //insert data into tweet row
         public void bind(Tweet tweet) {
             tweetBody.setText(tweet.tweetBody);
-            userName.setText(tweet.user.userName);
+            userName.setText(tweet.user.userName + ". " + tweet.timeStamp);
             //load image attached to tweet
             if(!tweet.mediaUrl.isEmpty()) {
                 Glide.with(context)
                         .load(tweet.mediaUrl)
                         .into(tweetImage);
+            } else {
+                //hide card view if image is empty
+                cardView.setVisibility(View.GONE);
             }
             Glide.with(context).load(tweet.user.userImageUrl).into(userProfilePicture);
         }
