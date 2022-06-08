@@ -39,6 +39,10 @@ public class TimeLineActivity extends AppCompatActivity {
     private final int REQUEST_CODE = 20;
     private SwipeRefreshLayout swipeRefreshLayout;
     private final String TAG ="TimelineActivity";
+
+    // Store a member variable for the listener
+    private EndlessRecyclerViewScrollListener scrollListener;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,11 +72,26 @@ public class TimeLineActivity extends AppCompatActivity {
         //initialize tweets and adapter
         tweets = new LinkedList<Tweet>();
         tweetsAdapter = new TweetsAdapter(this, tweets);
+
         ///recycler view setup:
         //setup layout manager
-        tweetsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        tweetsRecyclerView.setLayoutManager(linearLayoutManager);
+
+        // Retain an instance so that you can call `resetState()` for fresh searches
+        scrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                // Triggered only when new data needs to be appended to the list
+                // Add whatever code is needed to append new items to the bottom of the list
+                loadNextDataFromApi(page);
+            }
+        };
+
         //set adapter
         tweetsRecyclerView.setAdapter(tweetsAdapter);
+        //add listener to recycler view
+        tweetsRecyclerView.addOnScrollListener(scrollListener);
         populateHomeTimeLine();
 
     }
@@ -90,7 +109,7 @@ public class TimeLineActivity extends AppCompatActivity {
     //get new data
     private void fetchTimelineAsync(int page) {
         showProgressBar();
-        twitterClient.getHomeTimeline(new JsonHttpResponseHandler() {
+        twitterClient.getHomeTimeline(1, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Headers headers, JSON json) {
                 //remove old data
@@ -150,7 +169,7 @@ public class TimeLineActivity extends AppCompatActivity {
     }
 
     private void populateHomeTimeLine() {
-        twitterClient.getHomeTimeline(new JsonHttpResponseHandler() {
+        twitterClient.getHomeTimeline(1, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Headers headers, JSON json) {
                 Log.i(TAG, "success fetching timeline");
@@ -195,5 +214,35 @@ public class TimeLineActivity extends AppCompatActivity {
         // Hide progress item
         miActionProgressItem.setVisible(false);
     }
+
+    // Append the next page of data into the adapter
+    // This method probably sends out a network request and appends new data items to your adapter.
+    public void loadNextDataFromApi(int offset) {
+        showProgressBar();
+        twitterClient.getHomeTimeline(offset, new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Headers headers, JSON json) {
+
+                //add new data
+                try {
+                    tweetsAdapter.addAll(Tweet.getAllTweets(json.jsonArray));
+                } catch (JSONException e) {
+                    Log.d(TAG, "failed to get all tweets " + e.toString());
+                    e.printStackTrace();
+                }
+
+                //end refreshing
+                swipeRefreshLayout.setRefreshing(false);
+                hideProgressBar();
+            }
+
+            @Override
+            public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
+                Log.d(TAG, "Fetching failed on refresh " + response);
+                hideProgressBar();
+            }
+        });
+    }
+
 
 }
