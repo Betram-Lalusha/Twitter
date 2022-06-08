@@ -112,7 +112,6 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
         //when user clicks a movie, take user to movie details
         @Override
         public void onClick(View v) {
-            System.out.println("clicked!!!");
             int position = getAdapterPosition();
             if(position != RecyclerView.NO_POSITION) {
                 Tweet tweet = tweets.get(position);

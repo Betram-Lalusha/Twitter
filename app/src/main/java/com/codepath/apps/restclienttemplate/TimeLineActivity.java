@@ -219,7 +219,7 @@ public class TimeLineActivity extends AppCompatActivity {
     // This method probably sends out a network request and appends new data items to your adapter.
     public void loadNextDataFromApi(int offset) {
         showProgressBar();
-        twitterClient.getHomeTimeline(offset, new JsonHttpResponseHandler() {
+        twitterClient.getHomeTimeline(offset + 1, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Headers headers, JSON json) {
 

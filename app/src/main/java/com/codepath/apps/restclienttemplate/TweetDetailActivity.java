@@ -6,6 +6,7 @@ import androidx.cardview.widget.CardView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcel;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -37,5 +38,12 @@ public class TweetDetailActivity extends AppCompatActivity {
         userName.setText(tweet.user.userName);
         Glide.with(this).load(tweet.mediaUrl).into(tweetImage);
         Glide.with(this).load(tweet.user.userImageUrl).into(userProfilePicture);
+    }
+
+    public void goTodUserProfile(View view) {
+        Intent intent = new Intent(this, UserProfileActivity.class);
+        intent.putExtra("user", Parcels.wrap(tweet.user));
+        //start activity
+        startActivity(intent);
     }
 }

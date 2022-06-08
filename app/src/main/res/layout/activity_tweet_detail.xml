@@ -13,6 +13,7 @@
         android:layout_marginTop="28dp"
         android:autoLink="all"
         android:linksClickable="true"
+        android:onClick="goTodUserProfile"
         android:text="TextView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.11"
@@ -47,6 +48,7 @@
         android:layout_height="42dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
+        android:onClick="goTodUserProfile"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:srcCompat="@tools:sample/avatars" />
