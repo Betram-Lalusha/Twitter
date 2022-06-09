@@ -45,6 +45,7 @@ The following **additional** features are implemented:
 	* [x] Media embedded in images are contained in card holder to make the corners rounded and the images look better
 	* [x] User profile picture is circular to make it look better
 	* [x] User can see the profile picture and background picture of a user when they visit a user's profile
+	* [x] user can see progress view when background, async events are loading
 
 ## Video Walkthrough
 
