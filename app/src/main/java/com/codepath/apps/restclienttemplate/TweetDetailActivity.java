@@ -11,6 +11,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.codepath.apps.restclienttemplate.databinding.ActivityComposeBinding;
+import com.codepath.apps.restclienttemplate.databinding.ActivityTweetDetailBinding;
+import com.codepath.apps.restclienttemplate.databinding.ActivityUserProfileBinding;
 import com.codepath.apps.restclienttemplate.models.Tweet;
 
 import org.parceler.Parcels;
@@ -21,15 +24,17 @@ public class TweetDetailActivity extends AppCompatActivity {
     public TextView  tweetBody;
     public ImageView tweetImage;
     public ImageView userProfilePicture;
+    public ActivityTweetDetailBinding binding;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_tweet_detail);
+        binding= ActivityTweetDetailBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
-        tweetImage = findViewById(R.id.detailImage);
-        userName = findViewById(R.id.detailUserName);
-        tweetBody = findViewById(R.id.detailTweetBody);
-        userProfilePicture = findViewById(R.id.detailUserImage);
+        tweetImage = binding.detailImage;
+        userName = binding.detailUserName;
+        tweetBody = binding.detailTweetBody;
+        userProfilePicture = binding.detailUserImage;
 
         Intent intent = getIntent();
         tweet = (Tweet) Parcels.unwrap(intent.getParcelableExtra(Tweet.class.getSimpleName()));

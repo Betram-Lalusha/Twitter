@@ -17,6 +17,9 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.codepath.apps.restclienttemplate.databinding.ActivityTimeLineBinding;
+import com.codepath.apps.restclienttemplate.databinding.ActivityTweetDetailBinding;
+import com.codepath.apps.restclienttemplate.databinding.ActivityUserProfileBinding;
 import com.codepath.apps.restclienttemplate.models.Tweet;
 import com.codepath.apps.restclienttemplate.models.TweetDao;
 import com.codepath.apps.restclienttemplate.models.TweetWithUser;
@@ -51,14 +54,16 @@ public class TimeLineActivity extends AppCompatActivity {
     // Store a member variable for the listener
     private EndlessRecyclerViewScrollListener scrollListener;
     private List<Tweet> tweetsFromDb;
+    ActivityTimeLineBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_time_line);
+        binding = ActivityTimeLineBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         //find swipe container view
-        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeContainer);
+        swipeRefreshLayout = (SwipeRefreshLayout) binding.swipeContainer;
         //listener for swipe refresh
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override

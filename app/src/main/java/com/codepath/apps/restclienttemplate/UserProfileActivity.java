@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.codepath.apps.restclienttemplate.databinding.ActivityUserProfileBinding;
 import com.codepath.apps.restclienttemplate.models.Tweet;
 import com.codepath.apps.restclienttemplate.models.User;
 
@@ -22,18 +23,22 @@ public class UserProfileActivity extends AppCompatActivity {
     public TextView  description;
     public ImageView userProfilePicture;
     public ImageView userProfilePictureBckg;
+    public ActivityUserProfileBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_user_profile);
+        binding= ActivityUserProfileBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
-        followers = findViewById(R.id.followers);
-        following = findViewById(R.id.following);
-        description = findViewById(R.id.description);
-        userName = findViewById(R.id.profileViewUserName);
-        userProfilePicture = findViewById(R.id.pfViewUserImage2);
-        userProfilePictureBckg = findViewById(R.id.pfViewUserImage);
+
+
+        followers = binding.followers;
+        following = binding.followers;
+        description = binding.description;
+        userName = binding.profileViewUserName;
+        userProfilePicture = binding.pfViewUserImage2;
+        userProfilePictureBckg = binding.pfViewUserImage;
 
         //get intent
         Intent intent = getIntent();
