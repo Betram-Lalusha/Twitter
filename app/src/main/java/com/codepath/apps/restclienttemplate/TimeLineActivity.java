@@ -1,6 +1,7 @@
 package com.codepath.apps.restclienttemplate;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -40,6 +41,8 @@ public class TimeLineActivity extends AppCompatActivity {
     private SwipeRefreshLayout swipeRefreshLayout;
     private final String TAG ="TimelineActivity";
 
+    ActionBar actionBar;
+
     // Store a member variable for the listener
     private EndlessRecyclerViewScrollListener scrollListener;
 
@@ -73,6 +76,8 @@ public class TimeLineActivity extends AppCompatActivity {
         tweets = new LinkedList<Tweet>();
         tweetsAdapter = new TweetsAdapter(this, tweets);
 
+        actionBar = getSupportActionBar();
+        actionBar.setIcon(R.drawable.ic_home_twitter);
         ///recycler view setup:
         //setup layout manager
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
