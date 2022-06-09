@@ -244,9 +244,9 @@ public class TimeLineActivity extends AppCompatActivity {
             @Override
             public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
                 Log.d(TAG, "Fetching failed on refresh " + response);
-                hideProgressBar();
             }
         });
+        hideProgressBar();
     }
 
 
