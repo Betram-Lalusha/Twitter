@@ -285,5 +285,9 @@ public class TimeLineActivity extends AppCompatActivity {
         hideProgressBar();
     }
 
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        binding = null;
+    }
 }

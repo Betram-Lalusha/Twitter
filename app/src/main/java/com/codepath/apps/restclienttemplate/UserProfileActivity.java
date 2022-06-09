@@ -53,4 +53,10 @@ public class UserProfileActivity extends AppCompatActivity {
         System.out.println("background " + user.profileBackGroundImage);
         Glide.with(this).load(user.userImageUrl).into(userProfilePictureBckg);
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        binding = null;
+    }
 }

@@ -11,6 +11,9 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.codepath.apps.restclienttemplate.databinding.ActivityComposeBinding;
+import com.codepath.apps.restclienttemplate.databinding.ActivityLoginBinding;
+import com.codepath.apps.restclienttemplate.databinding.ActivityUserProfileBinding;
 import com.codepath.apps.restclienttemplate.models.Tweet;
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
 
@@ -25,14 +28,16 @@ public class ComposeActivity extends AppCompatActivity {
     TextView tweetContent;
     TwitterClient twitterClient;
     private static final String TAG = "ComposeActivity";
+    public ActivityComposeBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_compose);
+        binding = ActivityComposeBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
-        tweetContent = findViewById(R.id.newTweet);
-        submitButton = findViewById(R.id.submitTweet);
+        tweetContent = binding.newTweet;
+        submitButton = binding.submitTweet;
         twitterClient = TwitterApp.getRestClient(this);
         //add event listener
         submitButton.setOnClickListener(new View.OnClickListener() {
@@ -72,5 +77,11 @@ public class ComposeActivity extends AppCompatActivity {
                 });
             }
         });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        binding = null;
     }
 }

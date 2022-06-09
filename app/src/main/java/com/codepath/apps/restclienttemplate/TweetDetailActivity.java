@@ -51,4 +51,10 @@ public class TweetDetailActivity extends AppCompatActivity {
         //start activity
         startActivity(intent);
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        binding = null;
+    }
 }
