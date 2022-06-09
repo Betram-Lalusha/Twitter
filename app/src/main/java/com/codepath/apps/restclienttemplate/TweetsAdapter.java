@@ -98,7 +98,7 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
             tweetBody.setText(tweet.tweetBody);
             userName.setText(tweet.user.userName + ". " + tweet.timeStamp);
             //load image attached to tweet
-            if(!tweet.mediaUrl.isEmpty()) {
+            if(tweet.mediaUrl != null && !tweet.mediaUrl.isEmpty()) {
                 Glide.with(context)
                         .load(tweet.mediaUrl)
                         .into(tweetImage);
@@ -106,6 +106,7 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
                 //hide card view if image is empty
                 cardView.setVisibility(View.GONE);
             }
+
             Glide.with(context).load(tweet.user.userImageUrl).into(userProfilePicture);
         }
 

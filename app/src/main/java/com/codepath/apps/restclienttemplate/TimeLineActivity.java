@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -17,6 +18,9 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.codepath.apps.restclienttemplate.models.Tweet;
+import com.codepath.apps.restclienttemplate.models.TweetDao;
+import com.codepath.apps.restclienttemplate.models.TweetWithUser;
+import com.codepath.apps.restclienttemplate.models.User;
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
 
 import org.json.JSONArray;
@@ -31,6 +35,7 @@ import okhttp3.Headers;
 public class TimeLineActivity extends AppCompatActivity {
 
     List<Tweet> tweets;
+    TweetDao tweetDao;
     TwitterClient twitterClient;
     TweetsAdapter tweetsAdapter;
     // Instance of the progress action-view
@@ -45,6 +50,7 @@ public class TimeLineActivity extends AppCompatActivity {
 
     // Store a member variable for the listener
     private EndlessRecyclerViewScrollListener scrollListener;
+    private List<Tweet> tweetsFromDb;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +76,7 @@ public class TimeLineActivity extends AppCompatActivity {
         });
 
         twitterClient = TwitterApp.getRestClient(this);
+        tweetDao = ((TwitterApp) getApplicationContext()).getMyDatabase().tweetDao();
         //find recycler view
         tweetsRecyclerView = findViewById(R.id.rvTweets);
         //initialize tweets and adapter
@@ -97,6 +104,17 @@ public class TimeLineActivity extends AppCompatActivity {
         tweetsRecyclerView.setAdapter(tweetsAdapter);
         //add listener to recycler view
         tweetsRecyclerView.addOnScrollListener(scrollListener);
+        //query for existing tweets
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+
+                List<TweetWithUser> tweetWithUsers = tweetDao.recentItems();
+                tweetsFromDb = TweetWithUser.getTweetList(tweetWithUsers);
+                tweetsAdapter.clear();
+                tweetsAdapter.addAll(tweetsFromDb);
+            }
+        });
         populateHomeTimeLine();
 
     }
@@ -180,8 +198,21 @@ public class TimeLineActivity extends AppCompatActivity {
                 Log.i(TAG, "success fetching timeline");
                 JSONArray jsonArray = json.jsonArray;
                 try {
-                    tweets.addAll(Tweet.getAllTweets(jsonArray));
+                    List<Tweet> tweetsFromJson = Tweet.getAllTweets(jsonArray);
+                    tweetsAdapter.clear();
+                    tweets.addAll(tweetsFromJson);
                     tweetsAdapter.notifyDataSetChanged();
+                    swipeRefreshLayout.setRefreshing(false);
+
+                    AsyncTask.execute(new Runnable() {
+                        @Override
+                        public void run() {
+                            //inset user before tweets
+                            List<User> usersFromNetwork = User.fromTweetArray(tweetsFromJson);
+                            tweetDao.insertModel(usersFromNetwork.toArray(new User[0]));
+                            tweetDao.insertModel(tweetsFromJson.toArray(new Tweet[0]));
+                        }
+                    });
                 } catch (JSONException e) {
                     Log.i(TAG, "failed to load tweets ", e);
                     e.printStackTrace();
@@ -212,17 +243,17 @@ public class TimeLineActivity extends AppCompatActivity {
 
     public void showProgressBar() {
         // Show progress item
-        miActionProgressItem.setVisible(true);
+        if(miActionProgressItem != null ) miActionProgressItem.setVisible(true);
     }
 
     public void hideProgressBar() {
         // Hide progress item
-        miActionProgressItem.setVisible(false);
+        if(miActionProgressItem != null )  miActionProgressItem.setVisible(false);
     }
 
     // Append the next page of data into the adapter
     // This method probably sends out a network request and appends new data items to your adapter.
-    public void loadNextDataFromApi(String offset) {
+    public void loadNextDataFromApi(Long offset) {
         showProgressBar();
         twitterClient.getOlderTweets(offset, new JsonHttpResponseHandler() {
             @Override
