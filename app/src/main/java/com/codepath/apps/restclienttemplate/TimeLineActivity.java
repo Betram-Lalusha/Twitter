@@ -89,7 +89,7 @@ public class TimeLineActivity extends AppCompatActivity {
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
                 // Triggered only when new data needs to be appended to the list
                 // Add whatever code is needed to append new items to the bottom of the list
-                loadNextDataFromApi(page);
+                loadNextDataFromApi(tweets.get(tweets.size() -1).id);
             }
         };
 
@@ -222,9 +222,9 @@ public class TimeLineActivity extends AppCompatActivity {
 
     // Append the next page of data into the adapter
     // This method probably sends out a network request and appends new data items to your adapter.
-    public void loadNextDataFromApi(int offset) {
+    public void loadNextDataFromApi(String offset) {
         showProgressBar();
-        twitterClient.getHomeTimeline(offset + 1, new JsonHttpResponseHandler() {
+        twitterClient.getOlderTweets(offset, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Headers headers, JSON json) {
 

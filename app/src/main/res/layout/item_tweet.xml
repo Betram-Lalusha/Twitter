@@ -20,10 +20,10 @@
         android:id="@+id/userName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:autoLink="all"
-        android:linksClickable="true"
         android:layout_marginStart="5dp"
         android:layout_toEndOf="@+id/userProfilePicture"
+        android:autoLink="all"
+        android:linksClickable="true"
         tools:text="thegr8scorpio" />
 
     <TextView
@@ -31,39 +31,53 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/userName"
-        android:autoLink="all"
-        android:linksClickable="true"
         android:layout_marginStart="5dp"
         android:layout_marginTop="9dp"
         android:layout_toEndOf="@+id/userProfilePicture"
+        android:autoLink="all"
+        android:linksClickable="true"
         android:text="All drake has is hits man" />
 
+<!--    <androidx.cardview.widget.CardView-->
+<!--        android:id="@+id/cardView"-->
+<!--        android:layout_width="251dp"-->
+<!--        android:layout_height="200dp"-->
+<!--        android:layout_below="@+id/tweetBody"-->
+<!--        android:layout_alignParentEnd="true"-->
+<!--        android:layout_marginStart="5dp"-->
+<!--        android:layout_marginTop="13dp"-->
+<!--        android:layout_marginEnd="87dp"-->
+<!--        android:layout_marginBottom="5dp"-->
+<!--        android:elevation="10dp"-->
+<!--        app:cardCornerRadius="8dp">-->
+
+<!--    </androidx.cardview.widget.CardView>-->
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView"
         android:layout_width="251dp"
         android:layout_height="200dp"
         android:layout_below="@+id/tweetBody"
-        android:layout_alignParentEnd="true"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="13dp"
-        android:layout_marginEnd="87dp"
-        android:layout_marginBottom="5dp"
-        android:elevation="10dp"
-        app:cardCornerRadius="8dp">
+        android:layout_alignStart="@+id/tweetBody"
+        android:layout_marginStart="-51dp"
+        android:layout_marginLeft="@dimen/grid_margin"
+        android:layout_marginTop="@dimen/cell_margin"
+        android:layout_marginRight="@dimen/grid_margin"
+        android:clickable="true"
+        app:cardCornerRadius="@dimen/card_corner_radius"
+        app:cardElevation="@dimen/card_elevation">
 
-        <ImageView
-            android:id="@+id/tweetImage"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@+id/tweetBody"
-            android:layout_alignParentEnd="false"
-            android:layout_marginStart="0dp"
-            android:layout_marginLeft="0dp"
-            android:layout_marginTop="0dp"
-            android:layout_marginEnd="0dp"
-            android:layout_marginRight="0dp"
-            tools:layout_alignParentEnd="true"
-            tools:srcCompat="@tools:sample/avatars" />
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/tweetImage"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/tweetBody"
+                android:scaleType="centerCrop" />
+        </LinearLayout>
     </androidx.cardview.widget.CardView>
 
 </RelativeLayout>
