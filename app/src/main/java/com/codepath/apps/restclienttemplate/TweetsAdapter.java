@@ -96,7 +96,7 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
         //insert data into tweet row
         public void bind(Tweet tweet) {
             tweetBody.setText(tweet.tweetBody);
-            userName.setText(tweet.user.userName + ". " + tweet.timeStamp);
+            userName.setText(tweet.user.userName + "@"+ tweet.user.userHandle + ". " + tweet.timeStamp);
             //load image attached to tweet
             if(tweet.mediaUrl != null && !tweet.mediaUrl.isEmpty()) {
                 Glide.with(context)

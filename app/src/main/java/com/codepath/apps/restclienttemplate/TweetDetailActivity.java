@@ -35,7 +35,7 @@ public class TweetDetailActivity extends AppCompatActivity {
         tweet = (Tweet) Parcels.unwrap(intent.getParcelableExtra(Tweet.class.getSimpleName()));
 
         tweetBody.setText(tweet.tweetBody);
-        userName.setText(tweet.user.userName);
+        userName.setText(tweet.user.userName + "@"+ tweet.user.userHandle + ". " + tweet.timeStamp);
         Glide.with(this).load(tweet.mediaUrl).into(tweetImage);
         Glide.with(this).load(tweet.user.userImageUrl).into(userProfilePicture);
     }

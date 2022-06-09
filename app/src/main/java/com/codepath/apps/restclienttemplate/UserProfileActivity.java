@@ -19,6 +19,7 @@ public class UserProfileActivity extends AppCompatActivity {
     public TextView userName;
     public TextView  followers;
     public TextView  following;
+    public TextView  description;
     public ImageView userProfilePicture;
     public ImageView userProfilePictureBckg;
 
@@ -29,6 +30,7 @@ public class UserProfileActivity extends AppCompatActivity {
 
         followers = findViewById(R.id.followers);
         following = findViewById(R.id.following);
+        description = findViewById(R.id.description);
         userName = findViewById(R.id.profileViewUserName);
         userProfilePicture = findViewById(R.id.pfViewUserImage2);
         userProfilePictureBckg = findViewById(R.id.pfViewUserImage);
@@ -38,7 +40,8 @@ public class UserProfileActivity extends AppCompatActivity {
         user = (User) Parcels.unwrap(intent.getParcelableExtra("user"));
 
         //put info in views
-        userName.setText(user.userName);
+        description.setText("Bio: "+ user.description);
+        userName.setText(user.userName + "@"+ user.userHandle);
         followers.setText("followers " + String.valueOf(user.followers));
         following.setText("following " + String.valueOf(user.following));
         Glide.with(this).load(user.userImageUrl).into(userProfilePicture);

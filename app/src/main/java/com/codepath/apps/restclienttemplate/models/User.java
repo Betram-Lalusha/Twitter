@@ -28,6 +28,8 @@ public class User {
     @ColumnInfo
     public String userName;
     @ColumnInfo
+    public String description;
+    @ColumnInfo
     public String userHandle;
     @ColumnInfo
     public String userImageUrl;
@@ -45,6 +47,7 @@ public class User {
             user.following = jsonObject.getInt("friends_count");
             user.followers = jsonObject.getInt("followers_count");
             user.userHandle = jsonObject.getString("screen_name");
+            user.description = jsonObject.getString("description");
             user.userImageUrl = jsonObject.getString("profile_image_url_https");
             user.profileBackGroundImage = jsonObject.getString("profile_background_image_url_https");
             Log.i("USER", "USER " + user.profileBackGroundImage);
