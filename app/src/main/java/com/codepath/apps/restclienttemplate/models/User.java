@@ -1,5 +1,7 @@
 package com.codepath.apps.restclienttemplate.models;
 
+import android.util.Log;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -26,6 +28,7 @@ public class User {
             user.userHandle = jsonObject.getString("screen_name");
             user.userImageUrl = jsonObject.getString("profile_image_url_https");
             user.profileBackGroundImage = jsonObject.getString("profile_background_image_url_https");
+            Log.i("USER", "USER " + user.profileBackGroundImage);
         } catch (JSONException e) {
             e.printStackTrace();
         }

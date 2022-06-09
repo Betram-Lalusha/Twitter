@@ -42,6 +42,7 @@ public class UserProfileActivity extends AppCompatActivity {
         followers.setText("followers " + String.valueOf(user.followers));
         following.setText("following " + String.valueOf(user.following));
         Glide.with(this).load(user.userImageUrl).into(userProfilePicture);
-        Glide.with(this).load(user.profileBackGroundImage).into(userProfilePictureBckg);
+        System.out.println("background " + user.profileBackGroundImage);
+        Glide.with(this).load(user.userImageUrl).into(userProfilePictureBckg);
     }
 }
