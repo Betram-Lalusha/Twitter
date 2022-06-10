@@ -15,6 +15,7 @@
         android:layout_alignParentEnd="true"
         android:layout_marginStart="213dp"
         android:layout_marginEnd="3dp"
+        android:background="@color/twitter_blue"
         android:onClick="onLogOut"
         android:text="LogOut" />
 
