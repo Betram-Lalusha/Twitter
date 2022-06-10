@@ -34,7 +34,7 @@ public class UserProfileActivity extends AppCompatActivity {
 
 
         followers = binding.followers;
-        following = binding.followers;
+        following = binding.following;
         description = binding.description;
         userName = binding.profileViewUserName;
         userProfilePicture = binding.pfViewUserImage2;
